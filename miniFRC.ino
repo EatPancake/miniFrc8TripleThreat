@@ -13,6 +13,8 @@ NoU_Motor M_BR(4);
 NoU_Motor intake(5);
 NoU_Motor flyWheel(6);
 
+NoU_Drivetrain drivetrain(&M_FL,&M_FR,&M_BL,&M_BR);
+
 BluetoothSerial bluetooth;
 
 
@@ -22,71 +24,48 @@ void setup() {
   AlfredoConnect.begin(bluetooth);
   bluetooth.println("Connected ig");
   bluetooth.println("I have no clue what I'm doing :D");
+  bluetooth.println("\"this code should work\" Archer");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  //Vars for drivetrain
+  float throttle = 0;
+  float rotation = 0;
 
+  //Forward and backwards
+  if (AlfredoConnect.keyHeld(Key::W)){
+    throttle = 1;
+  }else if (AlfredoConnect.keyHeld(Key::D)){
+    throttle = -1;
+  }
 
-    //TANK DRIVE *can change*
-    if (AlfredoConnect.keyHeld(Key::A)) {
-        M_FL.set(1);
-        M_BL.set(1);
-    }
-    else {
-        M_FL.set(0);
-        M_BL.set(0);
-    }
-    if (AlfredoConnect.keyHeld(Key::D)) {
-        M_FR.set(1);
-        M_BR.set(1);
-    }
-    else {
-        M_FR.set(0);
-        M_FR.set(0);
-    }
+  //Rotate left and right
+  if (AlfredoConnect.keyHeld(Key::A)){
+    rotation = -1;
+  }else if (AlfredoConnect.keyHeld(Key::D)){
+    rotation = 1;
+  }
 
-    if (AlfredoConnect.keyHeld(Key::J)) {
-        intake.set(1);
-    }
-    else {
-        intake.set(0);
-    }
+  //intake
+  if(AlfredoConnect.keyHeld(Key::J)){
+    intake.set(1);
+  }
+  else{
+    intake.set(0);
+  }
 
-    if (AlfredoConnect.keyHeld(Key::L)) {
-        flyWheel.set(1);
-    }
-    else {
-        flyWheel.set(0);
-    }
+  //flywheel
+  if(AlfredoConnect.keyHeld(Key::L)){
+    flyWheel.set(1);
+  }
+  else{
+    flyWheel.set(0);
+  }
 
-    AlfredoConnect.update();
+  //set motors
+  drivetrain.curvatureDrive(throttle, rotation);
 
-    /*
-    back up code if my stuff no work
+    
+  AlfredoConnect.update();
 
-    float throttle = 0;
-    float rotation = 0;
-
-    // Set the throttle of the robot based on what key is pressed
-    if (AlfredoConnect.keyHeld(Key::W)) {
-        throttle = 1;
-    }
-    else if (AlfredoConnect.keyHeld(Key::S)) {
-        throttle = -1;
-    }
-
-    // Set which direction the robot should turn based on what key is pressed
-    if (AlfredoConnect.keyHeld(Key::A)) {
-        rotation = -1;
-    }
-    else if (AlfredoConnect.keyHeld(Key::D)) {
-        rotation = 1;
-    }
-
-    // Make the robot drive
-    drivetrain.curvatureDrive(throttle, rotation);
-
-    AlfredoConnect.update();
-    */
 }
