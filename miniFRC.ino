@@ -35,7 +35,7 @@ void loop() {
   //Forward and backwards
   if (AlfredoConnect.keyHeld(Key::W)){
     throttle = 1;
-  }else if (AlfredoConnect.keyHeld(Key::D)){
+  }else if (AlfredoConnect.keyHeld(Key::S)){
     throttle = -1;
   }
 
